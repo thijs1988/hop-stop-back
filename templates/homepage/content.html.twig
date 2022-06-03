@@ -1,0 +1,145 @@
+{# @var ea \EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext #}
+{% extends ea.templatePath('layout') %}
+{% trans_default_domain ea.i18n.translationDomain %}
+
+{% block body_class 'page-content' %}
+
+{% block page_title %}
+    {% deprecated 'The "page_title" block is deprecated, use "content_title" instead.' %}
+{% endblock %}
+
+ {% block content_title %}{{ block('page_title') }}{% endblock %}
+
+{% block page_content %}
+    {% deprecated 'The "page_content" block is deprecated, use "main" instead.' %}
+{% endblock %}
+
+{% block main %}
+
+    <div class="container">
+        <canvas id="transactionsChart"></canvas>
+    </div>
+    <br>
+    <br>
+    <br>
+    <div class="container">
+        <canvas id="monthlyChart"></canvas>
+    </div>
+    <br>
+    <br>
+    <br>
+    <div class="container">
+        <canvas id="userRatioChart"></canvas>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // latest transactions chart
+
+        const labelArr = JSON.parse('{{ labels | json_encode | raw }}');
+        const dataArr = JSON.parse('{{ data | json_encode | raw }}');
+
+        const data = {
+            labels: labelArr,
+            datasets: [{
+                label: 'Latest Transactions',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: dataArr,
+            }]
+        };
+
+        const config = {
+            type: 'line',
+            data: data,
+            options: {}
+        };
+
+        // last year chart
+        const transactionsLastYear = JSON.parse('{{ allTransactionsData | json_encode | raw }}');
+        const months = JSON.parse('{{ months | json_encode | raw }}');
+
+        const lastYearData = {
+            labels: months,
+            datasets: [{
+                label: 'Transactions Last Year',
+                data: transactionsLastYear,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(255, 205, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(201, 203, 207, 0.2)'
+                ],
+                borderColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(255, 159, 64)',
+                    'rgb(255, 205, 86)',
+                    'rgb(75, 192, 192)',
+                    'rgb(54, 162, 235)',
+                    'rgb(153, 102, 255)',
+                    'rgb(201, 203, 207)'
+                ],
+                borderWidth: 1
+            }]
+        };
+
+        const configMonthly = {
+            type: 'bar',
+            data: lastYearData,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            },
+        };
+
+        const sessionCount = JSON.parse('{{ sessionCount | json_encode | raw }}');
+        const userCount = JSON.parse('{{ userCount | json_encode | raw }}');
+
+        const userRatioData = {
+            labels: [
+                'Session Orders',
+                'User Orders'
+            ],
+            datasets: [{
+                label: 'User Ratio Orders',
+                data: [sessionCount, userCount],
+                backgroundColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(54, 162, 235)'
+                ],
+                hoverOffset: 4
+            }]
+        };
+
+        const userRatioConfig = {
+            type: 'doughnut',
+            data: userRatioData,
+        };
+    </script>
+
+    <script>
+        const myChart = new Chart(
+            document.getElementById('transactionsChart'),
+            config
+        );
+
+        const monthlyChart = new Chart(
+            document.getElementById('monthlyChart'),
+            configMonthly
+        );
+
+        const userRatioChart = new Chart(
+            document.getElementById('userRatioChart'),
+            userRatioConfig
+        )
+
+    </script>
+
+{% endblock %}
+

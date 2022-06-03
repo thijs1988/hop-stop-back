@@ -1,0 +1,45 @@
+Hallo {{ transaction.name }}, bedankt voor uw bestelling!
+
+Wij gaan ervoor zorgen dat hij zo spoedig mogelijk wordt geleverd, Uw ordernummer is: {{ transaction.id }}. Hier volgt een opsomming van uw bestelling...
+
+{% set subtotal = 0%}
+{% if cartSession%}
+{% for item in cartSession %}
+{% set subtotal = subtotal + (item.amount[0] * item.price / 100) %}
+{{ item.productName|slice(0,20)}}
+{{ item.amount[0] }} x € {{ item.price / 100 }} = € {{ item.amount[0] * item.price / 100}}
+{% endfor %}
+{% endif %}
+
+{% if cartItems%}
+{% for item in cartItems %}
+{% set subtotal = subtotal + (item.amount * item.price / 100) %}
+{{ item.product|slice(0,20)}}
+{{ item.amount }} x € {{ item.price / 100}} = € {{ item.amount * item.price / 100}}
+{% endfor %}
+{% endif %}
+Subtotaal
+€ {{ subtotal }}
+{% set verzending = (subtotal > 75) ? 0 : 6.95 %}
+Verzending
+€ {{ verzending }}
+{% if coupon %}
+{% set discount = (coupon.discountType is same as('euro')) ? coupon.value : (subtotal / 100) * coupon.value  %}
+Korting
+{{ (coupon.discountType is same as('euro')) ? '- € '~coupon.value : '- % '~coupon.value }}
+{% endif %}
+
+Totaal
+€ {{ (coupon) ?  (subtotal - discount + verzending)|round(2) : (subtotal + verzending)|round(2) }}
+
+Bezorgadres:
+{{ transaction.name }}
+{{ transaction.street }}
+{{ transaction.postbox~' '~transaction.place }}
+{{ transaction.phoneNumber }}
+
+CONTACT
+Frederikplein 8
+5121 MB Rijen
+hop-stop@gmail.com
+06-12873056

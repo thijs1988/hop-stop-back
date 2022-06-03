@@ -1,0 +1,4 @@
+twig:
+    default_path: '%kernel.project_dir%/templates'
+    globals:
+        home_directory: 'www.hop-stop.nl'

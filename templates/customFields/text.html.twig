@@ -1,0 +1,10 @@
+{# @var ea \EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext #}
+{# @var field \EasyCorp\Bundle\EasyAdminBundle\Dto\FieldDto #}
+{# @var entity \EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto #}
+{% if ea.crud.currentAction == 'index' %}
+    {% set data = field.value|ea_json_decode %}
+    <span title="{{ field.value }}">There are {{ data|length }} products to be shipped, go to details to see more</span>
+{% else %}
+    {% set data = field.value|ea_format_print_value %}
+    <span title="{{ field.value }}">{{ data }}</span>
+{% endif %}

@@ -1,0 +1,25 @@
+api_platform:
+    eager_loading:
+        force_eager: false
+    mapping:
+        paths: ['%kernel.project_dir%/src/Entity']
+    patch_formats:
+        json:     ['application/merge-patch+json']
+        jsonapi:  ['application/vnd.api+json']
+    formats:
+        jsonld:
+            mime_types:
+                - application/ld+json
+        json:
+            mime_types:
+                - application/json
+        html:
+            mime_types:
+                - text/html
+        jsonhal:
+            mime_types:
+                - application/hal+json
+    swagger:
+        versions: [3]
+    exception_to_status:
+        App\Exception\InvalidConfirmationTokenException: 404

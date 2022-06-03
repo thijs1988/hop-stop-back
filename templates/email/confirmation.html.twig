@@ -1,0 +1,65 @@
+{% apply inky_to_html|inline_css %}
+<style>
+
+    .email-background{
+        background: radial-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.9)),
+        url("https://www.hop-stop.nl/uploads/16x9+Subs+box+_+_0003_7R300569.jpg") center;
+        background-size: cover;
+        height: fit-content;
+        border-radius: 20px;
+    }
+
+    .center-text{
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+        width: 75%;
+        padding: 10px;
+        overflow-wrap: break-word;
+    }
+
+    .center-text img{
+        margin-top: 100px;
+    }
+
+    img{
+        width: 100px;
+    }
+
+    p,
+    h3{
+        color: rgba(255,255,255,0.2);
+        font-family: "Roboto Condensed", sans-serif;
+    }
+
+    h3{
+        font-size: 25px;
+        font-weight: 700;
+    }
+
+    p{
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 100px;
+    }
+</style>
+
+
+    <div class="email-background">
+        <div class="container">
+        <div class="center-text">
+           <img src="https://www.hop-stop.nl/uploads/Logo.png" alt="logo"/>
+            <h3 >
+                Hallo {{ user.getName() }}, bedankt voor het registreren!
+            </h3>
+
+            <p >
+                Graag willen wij uw email verifiëren, dit doet u door op
+                <a href="{{ url('default_confirm_token', {'token': user.getConfirmationToken()}) }}">deze</a>
+                link te klikken of, deze code in te voeren op de website: <b>{{ user.getConfirmationToken() }}</b>
+            </p>
+        </div>
+        </div>
+    </div>
+
+{% endapply %}
